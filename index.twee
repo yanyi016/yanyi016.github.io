@@ -1,0 +1,661 @@
+:: StoryInit
+<<set $score = 0>>
+<<set $name = "Alex">>
+<<set $courage = 0>>
+
+:: StoryData
+{
+    "format": "SugarCube",
+    "format-version": "2.37.3",
+    "start": "Start"
+}
+
+:: Start
+
+你是一位來自國外的交換學生。
+
+你的名字是 <<print $name>>。
+
+今天是你第一次來到台灣。
+
+晚上，你的台灣朋友帶你去逛夜市。
+
+街道上掛滿燈籠，人非常多，到處都是食物香味。
+
+「歡迎來到台灣夜市！」朋友開心地說。
+
+你看見很多攤販：
+
+• 珍珠奶茶  
+• 雞排  
+• 臭豆腐  
+• 烤香腸  
+
+你覺得非常新奇。
+
+<img src="images/bubble-tea.jpg" alt="珍珠奶茶" class="illustration">
+<img src="images/chicken-cutlet.jpg" alt="雞排" class="illustration">
+<img src="images/stinky-tofu.jpg" alt="臭豆腐" class="illustration">
+<img src="images/grilled-sausage.jpg" alt="烤香腸" class="illustration">
+
+今晚你可以慢慢體驗，也可以衝刺挑戰。
+
+你決定先：
+
+<<link "A. 放慢腳步，先觀察" "Observe1">>
+    <<set $score += 5>>
+    <<set $courage += 1>>
+<</link>>
+
+<<link "B. 直接衝去排最長的攤位" "Queue1">>
+    <<set $score += 10>>
+    <<set $courage += 2>>
+<</link>>
+
+<<link "C. 問朋友推薦，先安全牌" "Friend1">>
+    <<set $score += 8>>
+<</link>>
+
+:: Observe1
+
+你先站在路邊看人群。
+
+你發現大家會說「你好」和「謝謝」。
+
+朋友偷偷教你：
+
+「先用最簡單的打招呼就好。」
+
+────────────────
+
+小測驗 1
+
+「你好」是什麼意思？
+
+<<link "A. Goodbye" "Observe1">>
+    你答錯了！
+<</link>>
+
+<<link "B. Hello" "Drink1">>
+    <<set $score += 10>>
+    答對了！
+<</link>>
+
+<<link "C. Sorry" "Observe1">>
+    你答錯了！
+<</link>>
+
+:: Queue1
+
+你衝到排隊最長的攤位。
+
+香味超濃，原來是臭豆腐。
+
+你問朋友：
+
+「這真的可以吃嗎？」
+
+朋友笑著說：
+
+「雖然聞起來很臭，但吃起來很好吃！」
+
+你深呼吸。
+
+你要：
+
+<<link "A. 勇敢買一份" "Tofu1">>
+    <<set $score += 12>>
+    <<set $courage += 2>>
+<</link>>
+
+<<link "B. 先退到旁邊，觀察別人" "Drink1">>
+    <<set $score += 6>>
+    <<set $courage += 1>>
+<</link>>
+
+<<link "C. 決定先吃雞排" "Cutlet1">>
+    <<set $score += 8>>
+<</link>>
+
+:: Friend1
+
+你看向朋友。
+
+朋友說：
+
+「第一次來，先喝珍珠奶茶最安全。」
+
+你點點頭，走向飲料店。
+
+[[前往飲料店->Drink1]]
+
+:: Drink1
+
+你們先來到一間飲料店。
+
+老闆笑著說：
+
+「你好！要喝珍珠奶茶嗎？」
+
+<img src="images/bubble-tea.jpg" alt="珍珠奶茶" class="illustration">
+
+你有點緊張，但還是點點頭。
+
+────────────────
+
+小測驗 2
+
+「珍珠奶茶」是什麼？
+
+<<link "A. Bubble Tea" "Snack1">>
+    <<set $score += 10>>
+    答對了！
+<</link>>
+
+<<link "B. Hot Coffee" "Drink1">>
+    你答錯了！
+<</link>>
+
+<<link "C. Lemon Juice" "Drink1">>
+    你答錯了！
+<</link>>
+
+:: Tofu1
+
+你鼓起勇氣吃了一口。
+
+<img src="images/stinky-tofu.jpg" alt="臭豆腐" class="illustration">
+
+意外地，非常香！
+
+────────────────
+
+小測驗 3
+
+「臭豆腐」英文是什麼？
+
+<<link "A. Fried Rice" "Tofu1">>
+    你答錯了！
+<</link>>
+
+<<link "B. Stinky Tofu" "Cutlet1">>
+    <<set $score += 10>>
+    答對了！
+<</link>>
+
+<<link "C. Sweet Potato" "Tofu1">>
+    你答錯了！
+<</link>>
+
+:: Cutlet1
+
+走著走著，你看到超大的炸雞排。
+
+老闆正在大聲喊：
+
+「現炸雞排！很好吃喔！」
+
+朋友買了一份給你。
+
+雞排非常大，而且很酥脆。
+
+<img src="images/chicken-cutlet.jpg" alt="雞排" class="illustration">
+
+────────────────
+
+小測驗 4
+
+「雞排」是什麼？
+
+<<link "A. Fried Chicken Cutlet" "Game1">>
+    <<set $score += 10>>
+    答對了！
+<</link>>
+
+<<link "B. Hamburger" "Cutlet1">>
+    你答錯了！
+<</link>>
+
+<<link "C. Soup" "Cutlet1">>
+    你答錯了！
+<</link>>
+
+:: Snack1
+
+喝完飲料後，你開始探索小吃區。
+
+你聞到兩種味道：一個很香，一個有點怪。
+
+<img src="images/snack-stall.jpg" alt="夜市小吃攤" class="illustration">
+
+你要先嘗試哪個？
+
+<<link "A. 香味來源，雞排" "Cutlet1">>
+    <<set $score += 8>>
+<</link>>
+
+<<link "B. 奇怪味道，臭豆腐" "Tofu1">>
+    <<set $score += 8>>
+    <<set $courage += 1>>
+<</link>>
+
+<<link "C. 先去玩遊戲，等等再吃" "Game1">>
+    <<set $score += 5>>
+<</link>>
+
+:: Game1
+
+吃完東西後，你們開始玩夜市遊戲。
+
+你拿起球，準備丟瓶子。
+
+<img src="images/nightmarket-game.jpg" alt="夜市遊戲" class="illustration">
+
+你要用哪種策略？
+
+<<link "A. 用力丟，拼氣勢" "Praise1">>
+    <<set $score += 6>>
+    <<set $courage += 1>>
+    你打翻了一個瓶子。
+<</link>>
+
+<<link "B. 對準角度，小力丟" "Praise1">>
+    <<set $score += 12>>
+    你連中兩個瓶子！
+<</link>>
+
+<<link "C. 先觀察別人玩法" "Praise1">>
+    <<set $score += 8>>
+    你學會了節奏。
+<</link>>
+
+:: Praise1
+
+老闆開心地說：
+
+「太厲害了！」
+
+你得到一個可愛的小娃娃。
+
+────────────────
+
+小測驗 5
+
+「太厲害了」是什麼意思？
+
+<<link "A. Very Dangerous" "Praise1">>
+    你答錯了！
+<</link>>
+
+<<link "B. Very Amazing" "Ending">>
+    <<set $score += 10>>
+    答對了！
+<</link>>
+
+<<link "C. Very Expensive" "Praise1">>
+    你答錯了！
+<</link>>
+
+:: Ending
+
+夜深了。
+
+你和朋友坐在夜市旁邊休息。
+
+你看著熱鬧的人群與燈光，心裡非常感動。
+
+你發現：
+
+台灣不只有美食，
+
+還有很多熱情與溫暖的人。
+
+今晚，你學會了很多新的中文單字：
+
+• 你好  
+• 珍珠奶茶  
+• 臭豆腐  
+• 雞排  
+• 太厲害了  
+
+────────────────
+
+你的總分：
+
+<<print $score>>
+
+你的勇氣值：
+
+<<print $courage>>
+
+<<if $score >= 55>>
+你已經成為夜市中文高手了！
+<</if>>
+
+<<if $score >= 35 and $score < 55>>
+你今天學到了很多中文！
+<</if>>
+
+<<if $score < 35>>
+下次再來挑戰一次夜市吧！
+<</if>>
+
+<<if $courage >= 3>>
+你也變得更敢嘗試新事物了。
+<</if>>
+
+【夜市篇 完】
+
+[[前往文化體驗篇->CultureStart]]
+
+:: CultureStart
+
+隔天早上，你和朋友約好去體驗台灣文化。
+
+第一站是廟宇。香火繚繞，鐘鼓聲很莊嚴。
+
+<img src="images/temple.jpg" alt="廟宇" class="illustration">
+
+朋友提醒你要保持禮貌。
+
+你決定先：
+
+<<link "A. 先觀察大家的動作" "TempleObserve">>
+    <<set $score += 6>>
+    <<set $courage += 1>>
+<</link>>
+
+<<link "B. 直接跟著做，試試看" "TempleTry">>
+    <<set $score += 10>>
+    <<set $courage += 2>>
+<</link>>
+
+<<link "C. 問朋友注意事項" "TempleAsk">>
+    <<set $score += 8>>
+<</link>>
+
+:: TempleObserve
+
+你先觀察大家雙手合十，然後輕輕鞠躬。
+
+朋友說這是表示尊重。
+
+────────────────
+
+小測驗 1
+
+「合十」表示什麼？
+
+<<link "A. 表示尊重" "TempleNext">>
+    <<set $score += 10>>
+    答對了！
+<</link>>
+
+<<link "B. 表示道歉" "TempleObserve">>
+    你答錯了！
+<</link>>
+
+<<link "C. 表示再見" "TempleObserve">>
+    你答錯了！
+<</link>>
+
+:: TempleTry
+
+你跟著大家做，雖然有點緊張，但很順利。
+
+朋友小聲提醒你先心裡默念願望。
+
+────────────────
+
+小測驗 1
+
+在廟裡要保持什麼態度？
+
+<<link "A. 安靜與尊重" "TempleNext">>
+    <<set $score += 10>>
+    答對了！
+<</link>>
+
+<<link "B. 大聲聊天" "TempleTry">>
+    你答錯了！
+<</link>>
+
+<<link "C. 快速跑動" "TempleTry">>
+    你答錯了！
+<</link>>
+
+:: TempleAsk
+
+朋友說：
+
+「進廟宇要保持安靜，看到香爐不要亂碰。」
+
+你點點頭，跟著大家慢慢走。
+
+[[前往下一站->TempleNext]]
+
+:: TempleNext
+
+離開廟宇後，你們來到傳統茶館。
+
+老闆端上茶具，水聲很清脆。
+
+<img src="images/tea-house.jpg" alt="茶館" class="illustration">
+
+朋友說：
+
+「台灣的茶文化很重視『慢』。」
+
+你要：
+
+<<link "A. 慢慢品茶，感受香氣" "Tea1">>
+    <<set $score += 10>>
+<</link>>
+
+<<link "B. 一口喝完，怕燙" "Tea1">>
+    <<set $score += 4>>
+<</link>>
+
+<<link "C. 問老闆泡茶步驟" "Tea1">>
+    <<set $score += 8>>
+    <<set $courage += 1>>
+<</link>>
+
+:: Tea1
+
+茶香慢慢散開，你感覺很放鬆。
+
+────────────────
+
+小測驗 2
+
+「品茶」比較像哪一種感覺？
+
+<<link "A. 慢慢感受" "CultureCraft">>
+    <<set $score += 10>>
+    答對了！
+<</link>>
+
+<<link "B. 趕快喝完" "Tea1">>
+    你答錯了！
+<</link>>
+
+<<link "C. 吃飽就好" "Tea1">>
+    你答錯了！
+<</link>>
+
+:: CultureCraft
+
+下午你們去體驗手作。
+
+老師說今天要做「藍染」。
+
+<img src="images/indigo-dye.jpg" alt="藍染" class="illustration">
+
+你看到布泡進藍色染缸，顏色慢慢浮現。
+
+你要：
+
+<<link "A. 把布折出花紋再染" "Dye1">>
+    <<set $score += 10>>
+    <<set $courage += 1>>
+<</link>>
+
+<<link "B. 直接丟進去試試" "Dye1">>
+    <<set $score += 6>>
+<</link>>
+
+<<link "C. 先看別人怎麼做" "Dye1">>
+    <<set $score += 8>>
+<</link>>
+
+:: Dye1
+
+布慢慢變成漂亮的藍色，你覺得很有成就感。
+
+────────────────
+
+小測驗 3
+
+「藍染」是什麼？
+
+<<link "A. 用天然染料染布" "CultureEnding">>
+    <<set $score += 10>>
+    答對了！
+<</link>>
+
+<<link "B. 把布漂白" "Dye1">>
+    你答錯了！
+<</link>>
+
+<<link "C. 把布剪成碎片" "Dye1">>
+    你答錯了！
+<</link>>
+
+:: CultureEnding
+
+夕陽西下，你看著自己完成的作品。
+
+朋友笑著說：
+
+「你已經很懂台灣的文化節奏了。」
+
+────────────────
+
+文化體驗篇得分：
+
+<<print $score>>
+
+勇氣值：
+
+<<print $courage>>
+
+<<if $score >= 80>>
+你已經是文化體驗達人了！
+<</if>>
+
+<<if $score >= 60 and $score < 80>>
+你對台灣文化有很棒的理解！
+<</if>>
+
+<<if $score < 60>>
+下次再來多體驗一些吧！
+<</if>>
+
+【文化體驗篇 完】
+
+:: StoryStylesheet [stylesheet]
+:root {
+    --card-bg: rgba(255, 255, 255, 0.92);
+    --card-border: rgba(255, 200, 150, 0.7);
+    --ink: #2b1d14;
+    --accent: #f0a35d;
+    --accent-strong: #e48335;
+}
+
+body {
+    background:
+        radial-gradient(circle at 12% 18%, rgba(255, 214, 148, 0.55), transparent 45%),
+        radial-gradient(circle at 88% 22%, rgba(255, 166, 110, 0.45), transparent 50%),
+        radial-gradient(circle at 30% 80%, rgba(255, 210, 170, 0.35), transparent 45%),
+        linear-gradient(160deg, #ffe7c7 0%, #f7d0a8 35%, #f0c19f 60%, #f7e3cf 100%);
+    color: var(--ink);
+    font-family: "Noto Serif TC", "Songti TC", "Microsoft JhengHei", "PingFang TC", serif;
+}
+
+#story {
+    max-width: 46rem;
+}
+
+.passage {
+    background: var(--card-bg);
+    border-radius: 20px;
+    padding: 1.8rem 2.2rem;
+    border: 1px solid var(--card-border);
+    box-shadow:
+        0 20px 36px rgba(69, 39, 23, 0.18),
+        0 3px 0 rgba(255, 214, 168, 0.7) inset;
+    line-height: 1.8;
+    letter-spacing: 0.02em;
+    animation: passageFade 460ms ease-out;
+    position: relative;
+}
+
+.passage::before {
+    content: "";
+    display: block;
+    height: 6px;
+    width: 60px;
+    background: linear-gradient(90deg, var(--accent), #ffcf8f);
+    border-radius: 999px;
+    margin-bottom: 1rem;
+}
+
+.passage a {
+    color: #7a2f0f;
+    background: linear-gradient(180deg, #ffe4bf 0%, #ffd1a1 100%);
+    border: 1px solid #e1a86f;
+    border-radius: 14px;
+    padding: 0.35rem 0.9rem;
+    margin: 0.25rem 0.35rem 0.25rem 0;
+    display: inline-block;
+    text-decoration: none;
+    transition: transform 140ms ease, box-shadow 140ms ease, filter 140ms ease;
+}
+
+.passage a:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 18px rgba(74, 47, 29, 0.18);
+    filter: brightness(0.98);
+}
+
+.passage a:visited {
+    color: #5c2410;
+    background: linear-gradient(180deg, #f9d7b6 0%, #f2c69a 100%);
+}
+
+.illustration {
+    display: block;
+    max-width: 100%;
+    max-height: 240px;
+    height: auto;
+    border-radius: 14px;
+    margin: 0.8rem 0 1rem;
+    box-shadow: 0 12px 22px rgba(69, 39, 23, 0.18);
+    object-fit: cover;
+}
+
+#ui-bar {
+    background: rgba(48, 26, 16, 0.5);
+}
+
+@keyframes passageFade {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
