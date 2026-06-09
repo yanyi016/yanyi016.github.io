@@ -104,12 +104,96 @@ var LZString=function(){var r=String.fromCharCode,o="ABCDEFGHIJKLMNOPQRSTUVWXYZa
 		<div id="init-lacking"><p>Browser lacks capabilities required to play.</p><p>Upgrade or switch to another browser.</p></div>
 		<div id="init-loading"><div>Loading&hellip;</div></div>
 	</div>
-	<tw-storydata name="探索台灣" startnode="2" creator="Twine" creator-version="2.12.0" format="SugarCube" format-version="2.37.3" ifid="612B2653-5456-43B8-916F-9CAD1C43E103" options="" tags="" zoom="1" hidden><style role="stylesheet" id="twine-user-stylesheet" type="text/twine-css">:root {
+	<tw-storydata name="探索台灣" startnode="3" creator="Twine" creator-version="2.12.0" format="SugarCube" format-version="2.37.3" ifid="34B2CCA9-96DB-482F-9AC1-807FDA092DA9" options="" tags="" zoom="1" hidden><style role="stylesheet" id="twine-user-stylesheet" type="text/twine-css">:root {
     --card-bg: rgba(255, 255, 255, 0.92);
     --card-border: rgba(255, 200, 150, 0.7);
     --ink: #2b1d14;
     --accent: #f0a35d;
     --accent-strong: #e48335;
+}
+
+#story-caption {
+    color: #fff3e6;
+    font-size: 0.96rem;
+    line-height: 1.7;
+}
+
+.scoreboard {
+    background: rgba(255, 248, 239, 0.14);
+    border: 1px solid rgba(255, 238, 216, 0.18);
+    border-radius: 16px;
+    padding: 0.9rem 1rem;
+    margin: 0.25rem 0 1rem;
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.08);
+}
+
+.scoreboard-title {
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    margin-bottom: 0.4rem;
+    color: #ffdcb4;
+}
+
+.scoreboard-item {
+    color: #fff7ef;
+}
+
+.cover-page {
+    min-height: 72vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-start;
+    gap: 0.9rem;
+    padding: 1rem 0;
+}
+
+.cover-kicker {
+    font-size: 0.95rem;
+    letter-spacing: 0.22em;
+    color: #9b4a11;
+    text-transform: uppercase;
+}
+
+.cover-title {
+    font-size: clamp(2.3rem, 5vw, 4rem);
+    line-height: 1.08;
+    font-weight: 800;
+    color: #4b2410;
+    text-shadow: 0 2px 0 rgba(255, 255, 255, 0.35);
+}
+
+.cover-subtitle {
+    font-size: 1.08rem;
+    color: #5f3721;
+    max-width: 34rem;
+}
+
+.cover-author {
+    font-size: 1rem;
+    font-weight: 700;
+    color: #7a2f0f;
+    padding: 0.2rem 0 0.4rem;
+}
+
+.cover-page a {
+    font-size: 1rem;
+    padding: 0.7rem 1.2rem;
+    border-radius: 999px;
+}
+
+.name-entry {
+    margin: 0.8rem 0 1rem;
+}
+
+.name-entry input {
+    width: min(100%, 20rem);
+    padding: 0.7rem 0.9rem;
+    border-radius: 12px;
+    border: 1px solid rgba(122, 47, 15, 0.25);
+    background: rgba(255, 250, 244, 0.96);
+    color: #4b2410;
+    font-size: 1rem;
 }
 
 body {
@@ -188,6 +272,35 @@ body {
     background: rgba(48, 26, 16, 0.5);
 }
 
+.wrong-toast {
+    position: fixed;
+    left: 50%;
+    top: 20%;
+    transform: translate(-50%, -12px);
+    background: rgba(255, 247, 238, 0.96);
+    color: #7a2f0f;
+    border: 1px solid rgba(225, 168, 111, 0.75);
+    border-radius: 999px;
+    padding: 0.8rem 1.35rem;
+    box-shadow: 0 14px 28px rgba(74, 47, 29, 0.22);
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    z-index: 9999;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 180ms ease, transform 180ms ease;
+}
+
+.wrong-toast.is-visible {
+    opacity: 1;
+    transform: translate(-50%, 0);
+}
+
+.wrong-toast.is-hiding {
+    opacity: 0;
+    transform: translate(-50%, -12px);
+}
+
 @keyframes passageFade {
     from {
         opacity: 0;
@@ -197,13 +310,91 @@ body {
         opacity: 1;
         transform: translateY(0);
     }
-}</style><script role="script" id="twine-user-script" type="text/twine-javascript"></script><tw-passagedata pid="1" name="StoryInit" tags="" position="25,25" size="100,100">&lt;&lt;set $score = 0&gt;&gt;
+}</style><script role="script" id="twine-user-script" type="text/twine-javascript">window.showWrong = function () {
+    var existingToast = document.getElementById("wrong-toast");
+
+    if (existingToast) {
+        clearTimeout(window.wrongToastHideTimer);
+        clearTimeout(window.wrongToastRemoveTimer);
+        existingToast.remove();
+    }
+
+    var toast = document.createElement("div");
+    toast.id = "wrong-toast";
+    toast.className = "wrong-toast";
+    toast.textContent = "答錯了！";
+    document.body.appendChild(toast);
+
+    requestAnimationFrame(function () {
+        toast.classList.add("is-visible");
+    });
+
+    window.wrongToastHideTimer = window.setTimeout(function () {
+        toast.classList.remove("is-visible");
+        toast.classList.add("is-hiding");
+    }, 1100);
+
+    window.wrongToastRemoveTimer = window.setTimeout(function () {
+        if (toast && toast.parentNode) {
+            toast.parentNode.removeChild(toast);
+        }
+    }, 1400);
+};</script><tw-passagedata pid="1" name="StoryInit" tags="" position="25,25" size="100,100">&lt;&lt;set $score = 0&gt;&gt;
 &lt;&lt;set $name = &quot;Alex&quot;&gt;&gt;
-&lt;&lt;set $courage = 0&gt;&gt;</tw-passagedata><tw-passagedata pid="2" name="Start" tags="" position="150,25" size="100,100">你是一位來自國外的交換學生。
+&lt;&lt;set $courage = 0&gt;&gt;</tw-passagedata><tw-passagedata pid="2" name="StoryCaption" tags="" position="150,25" size="100,100">&lt;div class=&quot;scoreboard&quot;&gt;
+    &lt;div class=&quot;scoreboard-title&quot;&gt;旅程進度&lt;/div&gt;
+    &lt;div class=&quot;scoreboard-item&quot;&gt;總分：&lt;&lt;print $score&gt;&gt; / 100&lt;/div&gt;
+    &lt;div class=&quot;scoreboard-item&quot;&gt;勇氣值：&lt;&lt;print $courage&gt;&gt;&lt;/div&gt;
+&lt;/div&gt;</tw-passagedata><tw-passagedata pid="3" name="Cover" tags="" position="275,25" size="100,100">&lt;div class=&quot;cover-page&quot;&gt;
+
+&lt;div class=&quot;cover-kicker&quot;&gt;臺灣文化探索旅程&lt;/div&gt;
+
+&lt;div class=&quot;cover-title&quot;&gt;夜市、茶香與藍染&lt;/div&gt;
+
+&lt;div class=&quot;cover-subtitle&quot;&gt;從熱鬧夜市出發，走進屬於臺灣的文化日常。&lt;/div&gt;
+
+&lt;div class=&quot;cover-author&quot;&gt;作者：11457206呂妍儀&lt;/div&gt;
+
+&lt;&lt;link &quot;進入遊戲說明&quot; &quot;Guide&quot;&gt;&gt;
+&lt;&lt;/link&gt;&gt;
+
+&lt;/div&gt;</tw-passagedata><tw-passagedata pid="4" name="Guide" tags="" position="400,25" size="100,100">前情提要
+
+你是一名來自澳洲的交換學生，第一次來到臺灣。雖然你曾經在網路上看過許多關於臺灣的影片和介紹，但真正踏上這片土地時，還是充滿了期待與好奇。
+
+在接下來的幾天裡，你將展開一場特別的臺灣文化體驗之旅。這次旅程不只是觀光，更希望讓你親身感受臺灣人的生活方式與文化特色。
+
+旅程的第一站是熱鬧的夜市。你將穿梭在人潮與攤販之間，品嚐各種特色小吃，認識臺灣夜市獨特的飲食文化與人情味。
+
+接著，你將參與一系列文化體驗活動。你會走進傳統廟宇，了解臺灣的宗教信仰與民間文化；品嚐臺灣茶，學習茶文化背後的禮儀與歷史；還會親手體驗藍染工藝，製作屬於自己的藍染作品，感受傳統手工藝的魅力。
+
+在旅程中，你會遇到許多新朋友，也會學習許多新的中文詞彙。每完成一個活動，都會有不同的任務與挑戰等著你。準備好了嗎？
+
+你的臺灣文化探索之旅，現在正式開始！ 🇹🇼✈️🇦🇺
+
+────────────────
+
+遊戲說明
+
+1. 每一道題目答對都能累積分數。
+2. 你的選擇有時也會增加勇氣值。
+3. 分數與勇氣值會一直顯示在左側。
+4. 兩段故事的分數會合併計算，總分 100 分。
+
+請先輸入你的名字：
+
+&lt;div class=&quot;name-entry&quot;&gt;
+&lt;&lt;textbox &quot;$name&quot; &quot;Alex&quot;&gt;&gt;
+&lt;/div&gt;
+
+&lt;&lt;link &quot;前往夜市篇&quot; &quot;Start&quot;&gt;&gt;
+&lt;&lt;/link&gt;&gt;</tw-passagedata><tw-passagedata pid="5" name="Start" tags="" position="525,25" size="100,100">第一站是熱鬧的夜市。
+
+你是一名來自澳洲的交換學生。
 
 你的名字是 &lt;&lt;print $name&gt;&gt;。
 
-今天是你第一次來到台灣。
+今天是你第一次踏上臺灣這片土地。
 
 晚上，你的台灣朋友帶你去逛夜市。
 
@@ -230,18 +421,18 @@ body {
 你決定先：
 
 &lt;&lt;link &quot;A. 放慢腳步，先觀察&quot; &quot;Observe1&quot;&gt;&gt;
-    &lt;&lt;set $score += 5&gt;&gt;
+    &lt;&lt;set $score = Math.min($score + 5, 100)&gt;&gt;
     &lt;&lt;set $courage += 1&gt;&gt;
 &lt;&lt;/link&gt;&gt;
 
 &lt;&lt;link &quot;B. 直接衝去排最長的攤位&quot; &quot;Queue1&quot;&gt;&gt;
-    &lt;&lt;set $score += 10&gt;&gt;
+    &lt;&lt;set $score = Math.min($score + 10, 100)&gt;&gt;
     &lt;&lt;set $courage += 2&gt;&gt;
 &lt;&lt;/link&gt;&gt;
 
 &lt;&lt;link &quot;C. 問朋友推薦，先安全牌&quot; &quot;Friend1&quot;&gt;&gt;
-    &lt;&lt;set $score += 8&gt;&gt;
-&lt;&lt;/link&gt;&gt;</tw-passagedata><tw-passagedata pid="3" name="Observe1" tags="" position="275,25" size="100,100">你先站在路邊看人群。
+    &lt;&lt;set $score = Math.min($score + 8, 100)&gt;&gt;
+&lt;&lt;/link&gt;&gt;</tw-passagedata><tw-passagedata pid="6" name="Observe1" tags="" position="650,25" size="100,100">你先站在路邊看人群。
 
 你發現大家會說「你好」和「謝謝」。
 
@@ -256,17 +447,19 @@ body {
 「你好」是什麼意思？
 
 &lt;&lt;link &quot;A. Goodbye&quot; &quot;Observe1&quot;&gt;&gt;
-    你答錯了！
+    &lt;&lt;set $score = Math.max($score - 5, 0)&gt;&gt;
+    &lt;&lt;run showWrong()&gt;&gt;
 &lt;&lt;/link&gt;&gt;
 
 &lt;&lt;link &quot;B. Hello&quot; &quot;Drink1&quot;&gt;&gt;
-    &lt;&lt;set $score += 10&gt;&gt;
+    &lt;&lt;set $score = Math.min($score + 10, 100)&gt;&gt;
     答對了！
 &lt;&lt;/link&gt;&gt;
 
 &lt;&lt;link &quot;C. Sorry&quot; &quot;Observe1&quot;&gt;&gt;
-    你答錯了！
-&lt;&lt;/link&gt;&gt;</tw-passagedata><tw-passagedata pid="4" name="Queue1" tags="" position="400,25" size="100,100">你衝到排隊最長的攤位。
+    &lt;&lt;set $score = Math.max($score - 5, 0)&gt;&gt;
+    &lt;&lt;run showWrong()&gt;&gt;
+&lt;&lt;/link&gt;&gt;</tw-passagedata><tw-passagedata pid="7" name="Queue1" tags="" position="775,25" size="100,100">你衝到排隊最長的攤位。
 
 香味超濃，原來是臭豆腐。
 
@@ -283,18 +476,18 @@ body {
 你要：
 
 &lt;&lt;link &quot;A. 勇敢買一份&quot; &quot;Tofu1&quot;&gt;&gt;
-    &lt;&lt;set $score += 12&gt;&gt;
+    &lt;&lt;set $score = Math.min($score + 12, 100)&gt;&gt;
     &lt;&lt;set $courage += 2&gt;&gt;
 &lt;&lt;/link&gt;&gt;
 
 &lt;&lt;link &quot;B. 先退到旁邊，觀察別人&quot; &quot;Drink1&quot;&gt;&gt;
-    &lt;&lt;set $score += 6&gt;&gt;
+    &lt;&lt;set $score = Math.min($score + 6, 100)&gt;&gt;
     &lt;&lt;set $courage += 1&gt;&gt;
 &lt;&lt;/link&gt;&gt;
 
 &lt;&lt;link &quot;C. 決定先吃雞排&quot; &quot;Cutlet1&quot;&gt;&gt;
-    &lt;&lt;set $score += 8&gt;&gt;
-&lt;&lt;/link&gt;&gt;</tw-passagedata><tw-passagedata pid="5" name="Friend1" tags="" position="525,25" size="100,100">你看向朋友。
+    &lt;&lt;set $score = Math.min($score + 8, 100)&gt;&gt;
+&lt;&lt;/link&gt;&gt;</tw-passagedata><tw-passagedata pid="8" name="Friend1" tags="" position="900,25" size="100,100">你看向朋友。
 
 朋友說：
 
@@ -302,7 +495,7 @@ body {
 
 你點點頭，走向飲料店。
 
-[[前往飲料店-&gt;Drink1]]</tw-passagedata><tw-passagedata pid="6" name="Drink1" tags="" position="650,25" size="100,100">你們先來到一間飲料店。
+[[前往飲料店-&gt;Drink1]]</tw-passagedata><tw-passagedata pid="9" name="Drink1" tags="" position="1025,25" size="100,100">你們先來到一間飲料店。
 
 老闆笑著說：
 
@@ -319,17 +512,19 @@ body {
 「珍珠奶茶」是什麼？
 
 &lt;&lt;link &quot;A. Bubble Tea&quot; &quot;Snack1&quot;&gt;&gt;
-    &lt;&lt;set $score += 10&gt;&gt;
+    &lt;&lt;set $score = Math.min($score + 10, 100)&gt;&gt;
     答對了！
 &lt;&lt;/link&gt;&gt;
 
 &lt;&lt;link &quot;B. Hot Coffee&quot; &quot;Drink1&quot;&gt;&gt;
-    你答錯了！
+    &lt;&lt;set $score = Math.max($score - 5, 0)&gt;&gt;
+    &lt;&lt;run showWrong()&gt;&gt;
 &lt;&lt;/link&gt;&gt;
 
 &lt;&lt;link &quot;C. Lemon Juice&quot; &quot;Drink1&quot;&gt;&gt;
-    你答錯了！
-&lt;&lt;/link&gt;&gt;</tw-passagedata><tw-passagedata pid="7" name="Tofu1" tags="" position="775,25" size="100,100">你鼓起勇氣吃了一口。
+    &lt;&lt;set $score = Math.max($score - 5, 0)&gt;&gt;
+    &lt;&lt;run showWrong()&gt;&gt;
+&lt;&lt;/link&gt;&gt;</tw-passagedata><tw-passagedata pid="10" name="Tofu1" tags="" position="1150,25" size="100,100">你鼓起勇氣吃了一口。
 
 &lt;img src=&quot;images/stinky-tofu.jpg&quot; alt=&quot;臭豆腐&quot; class=&quot;illustration&quot;&gt;
 
@@ -342,17 +537,19 @@ body {
 「臭豆腐」英文是什麼？
 
 &lt;&lt;link &quot;A. Fried Rice&quot; &quot;Tofu1&quot;&gt;&gt;
-    你答錯了！
+    &lt;&lt;set $score = Math.max($score - 5, 0)&gt;&gt;
+    &lt;&lt;run showWrong()&gt;&gt;
 &lt;&lt;/link&gt;&gt;
 
 &lt;&lt;link &quot;B. Stinky Tofu&quot; &quot;Cutlet1&quot;&gt;&gt;
-    &lt;&lt;set $score += 10&gt;&gt;
+    &lt;&lt;set $score = Math.min($score + 10, 100)&gt;&gt;
     答對了！
 &lt;&lt;/link&gt;&gt;
 
 &lt;&lt;link &quot;C. Sweet Potato&quot; &quot;Tofu1&quot;&gt;&gt;
-    你答錯了！
-&lt;&lt;/link&gt;&gt;</tw-passagedata><tw-passagedata pid="8" name="Cutlet1" tags="" position="900,25" size="100,100">走著走著，你看到超大的炸雞排。
+    &lt;&lt;set $score = Math.max($score - 5, 0)&gt;&gt;
+    &lt;&lt;run showWrong()&gt;&gt;
+&lt;&lt;/link&gt;&gt;</tw-passagedata><tw-passagedata pid="11" name="Cutlet1" tags="" position="25,150" size="100,100">走著走著，你看到超大的炸雞排。
 
 老闆正在大聲喊：
 
@@ -371,17 +568,19 @@ body {
 「雞排」是什麼？
 
 &lt;&lt;link &quot;A. Fried Chicken Cutlet&quot; &quot;Game1&quot;&gt;&gt;
-    &lt;&lt;set $score += 10&gt;&gt;
+    &lt;&lt;set $score = Math.min($score + 10, 100)&gt;&gt;
     答對了！
 &lt;&lt;/link&gt;&gt;
 
 &lt;&lt;link &quot;B. Hamburger&quot; &quot;Cutlet1&quot;&gt;&gt;
-    你答錯了！
+    &lt;&lt;set $score = Math.max($score - 5, 0)&gt;&gt;
+    &lt;&lt;run showWrong()&gt;&gt;
 &lt;&lt;/link&gt;&gt;
 
 &lt;&lt;link &quot;C. Soup&quot; &quot;Cutlet1&quot;&gt;&gt;
-    你答錯了！
-&lt;&lt;/link&gt;&gt;</tw-passagedata><tw-passagedata pid="9" name="Snack1" tags="" position="1025,25" size="100,100">喝完飲料後，你開始探索小吃區。
+    &lt;&lt;set $score = Math.max($score - 5, 0)&gt;&gt;
+    &lt;&lt;run showWrong()&gt;&gt;
+&lt;&lt;/link&gt;&gt;</tw-passagedata><tw-passagedata pid="12" name="Snack1" tags="" position="150,150" size="100,100">喝完飲料後，你開始探索小吃區。
 
 你聞到兩種味道：一個很香，一個有點怪。
 
@@ -390,17 +589,17 @@ body {
 你要先嘗試哪個？
 
 &lt;&lt;link &quot;A. 香味來源，雞排&quot; &quot;Cutlet1&quot;&gt;&gt;
-    &lt;&lt;set $score += 8&gt;&gt;
+    &lt;&lt;set $score = Math.min($score + 8, 100)&gt;&gt;
 &lt;&lt;/link&gt;&gt;
 
 &lt;&lt;link &quot;B. 奇怪味道，臭豆腐&quot; &quot;Tofu1&quot;&gt;&gt;
-    &lt;&lt;set $score += 8&gt;&gt;
+    &lt;&lt;set $score = Math.min($score + 8, 100)&gt;&gt;
     &lt;&lt;set $courage += 1&gt;&gt;
 &lt;&lt;/link&gt;&gt;
 
 &lt;&lt;link &quot;C. 先去玩遊戲，等等再吃&quot; &quot;Game1&quot;&gt;&gt;
-    &lt;&lt;set $score += 5&gt;&gt;
-&lt;&lt;/link&gt;&gt;</tw-passagedata><tw-passagedata pid="10" name="Game1" tags="" position="1150,25" size="100,100">吃完東西後，你們開始玩夜市遊戲。
+    &lt;&lt;set $score = Math.min($score + 5, 100)&gt;&gt;
+&lt;&lt;/link&gt;&gt;</tw-passagedata><tw-passagedata pid="13" name="Game1" tags="" position="275,150" size="100,100">吃完東西後，你們開始玩夜市遊戲。
 
 你拿起球，準備丟瓶子。
 
@@ -409,20 +608,20 @@ body {
 你要用哪種策略？
 
 &lt;&lt;link &quot;A. 用力丟，拼氣勢&quot; &quot;Praise1&quot;&gt;&gt;
-    &lt;&lt;set $score += 6&gt;&gt;
+    &lt;&lt;set $score = Math.min($score + 6, 100)&gt;&gt;
     &lt;&lt;set $courage += 1&gt;&gt;
     你打翻了一個瓶子。
 &lt;&lt;/link&gt;&gt;
 
 &lt;&lt;link &quot;B. 對準角度，小力丟&quot; &quot;Praise1&quot;&gt;&gt;
-    &lt;&lt;set $score += 12&gt;&gt;
+    &lt;&lt;set $score = Math.min($score + 12, 100)&gt;&gt;
     你連中兩個瓶子！
 &lt;&lt;/link&gt;&gt;
 
 &lt;&lt;link &quot;C. 先觀察別人玩法&quot; &quot;Praise1&quot;&gt;&gt;
-    &lt;&lt;set $score += 8&gt;&gt;
+    &lt;&lt;set $score = Math.min($score + 8, 100)&gt;&gt;
     你學會了節奏。
-&lt;&lt;/link&gt;&gt;</tw-passagedata><tw-passagedata pid="11" name="Praise1" tags="" position="25,150" size="100,100">老闆開心地說：
+&lt;&lt;/link&gt;&gt;</tw-passagedata><tw-passagedata pid="14" name="Praise1" tags="" position="400,150" size="100,100">老闆開心地說：
 
 「太厲害了！」
 
@@ -435,17 +634,19 @@ body {
 「太厲害了」是什麼意思？
 
 &lt;&lt;link &quot;A. Very Dangerous&quot; &quot;Praise1&quot;&gt;&gt;
-    你答錯了！
+    &lt;&lt;set $score = Math.max($score - 5, 0)&gt;&gt;
+    &lt;&lt;run showWrong()&gt;&gt;
 &lt;&lt;/link&gt;&gt;
 
 &lt;&lt;link &quot;B. Very Amazing&quot; &quot;Ending&quot;&gt;&gt;
-    &lt;&lt;set $score += 10&gt;&gt;
+    &lt;&lt;set $score = Math.min($score + 10, 100)&gt;&gt;
     答對了！
 &lt;&lt;/link&gt;&gt;
 
 &lt;&lt;link &quot;C. Very Expensive&quot; &quot;Praise1&quot;&gt;&gt;
-    你答錯了！
-&lt;&lt;/link&gt;&gt;</tw-passagedata><tw-passagedata pid="12" name="Ending" tags="" position="150,150" size="100,100">夜深了。
+    &lt;&lt;set $score = Math.max($score - 5, 0)&gt;&gt;
+    &lt;&lt;run showWrong()&gt;&gt;
+&lt;&lt;/link&gt;&gt;</tw-passagedata><tw-passagedata pid="15" name="Ending" tags="" position="525,150" size="100,100">夜深了。
 
 你和朋友坐在夜市旁邊休息。
 
@@ -493,7 +694,7 @@ body {
 
 【夜市篇 完】
 
-[[前往文化體驗篇-&gt;CultureStart]]</tw-passagedata><tw-passagedata pid="13" name="CultureStart" tags="" position="275,150" size="100,100">隔天早上，你和朋友約好去體驗台灣文化。
+[[前往文化體驗篇-&gt;CultureStart]]</tw-passagedata><tw-passagedata pid="16" name="CultureStart" tags="" position="650,150" size="100,100">隔天早上，你和朋友約好去體驗台灣文化。
 
 第一站是廟宇。香火繚繞，鐘鼓聲很莊嚴。
 
@@ -504,18 +705,18 @@ body {
 你決定先：
 
 &lt;&lt;link &quot;A. 先觀察大家的動作&quot; &quot;TempleObserve&quot;&gt;&gt;
-    &lt;&lt;set $score += 6&gt;&gt;
+    &lt;&lt;set $score = Math.min($score + 6, 100)&gt;&gt;
     &lt;&lt;set $courage += 1&gt;&gt;
 &lt;&lt;/link&gt;&gt;
 
 &lt;&lt;link &quot;B. 直接跟著做，試試看&quot; &quot;TempleTry&quot;&gt;&gt;
-    &lt;&lt;set $score += 10&gt;&gt;
+    &lt;&lt;set $score = Math.min($score + 10, 100)&gt;&gt;
     &lt;&lt;set $courage += 2&gt;&gt;
 &lt;&lt;/link&gt;&gt;
 
 &lt;&lt;link &quot;C. 問朋友注意事項&quot; &quot;TempleAsk&quot;&gt;&gt;
-    &lt;&lt;set $score += 8&gt;&gt;
-&lt;&lt;/link&gt;&gt;</tw-passagedata><tw-passagedata pid="14" name="TempleObserve" tags="" position="400,150" size="100,100">你先觀察大家雙手合十，然後輕輕鞠躬。
+    &lt;&lt;set $score = Math.min($score + 8, 100)&gt;&gt;
+&lt;&lt;/link&gt;&gt;</tw-passagedata><tw-passagedata pid="17" name="TempleObserve" tags="" position="775,150" size="100,100">你先觀察大家雙手合十，然後輕輕鞠躬。
 
 朋友說這是表示尊重。
 
@@ -526,17 +727,19 @@ body {
 「合十」表示什麼？
 
 &lt;&lt;link &quot;A. 表示尊重&quot; &quot;TempleNext&quot;&gt;&gt;
-    &lt;&lt;set $score += 10&gt;&gt;
+    &lt;&lt;set $score = Math.min($score + 10, 100)&gt;&gt;
     答對了！
 &lt;&lt;/link&gt;&gt;
 
 &lt;&lt;link &quot;B. 表示道歉&quot; &quot;TempleObserve&quot;&gt;&gt;
-    你答錯了！
+    &lt;&lt;set $score = Math.max($score - 5, 0)&gt;&gt;
+    &lt;&lt;run showWrong()&gt;&gt;
 &lt;&lt;/link&gt;&gt;
 
 &lt;&lt;link &quot;C. 表示再見&quot; &quot;TempleObserve&quot;&gt;&gt;
-    你答錯了！
-&lt;&lt;/link&gt;&gt;</tw-passagedata><tw-passagedata pid="15" name="TempleTry" tags="" position="525,150" size="100,100">你跟著大家做，雖然有點緊張，但很順利。
+    &lt;&lt;set $score = Math.max($score - 5, 0)&gt;&gt;
+    &lt;&lt;run showWrong()&gt;&gt;
+&lt;&lt;/link&gt;&gt;</tw-passagedata><tw-passagedata pid="18" name="TempleTry" tags="" position="900,150" size="100,100">你跟著大家做，雖然有點緊張，但很順利。
 
 朋友小聲提醒你先心裡默念願望。
 
@@ -547,23 +750,25 @@ body {
 在廟裡要保持什麼態度？
 
 &lt;&lt;link &quot;A. 安靜與尊重&quot; &quot;TempleNext&quot;&gt;&gt;
-    &lt;&lt;set $score += 10&gt;&gt;
+    &lt;&lt;set $score = Math.min($score + 10, 100)&gt;&gt;
     答對了！
 &lt;&lt;/link&gt;&gt;
 
 &lt;&lt;link &quot;B. 大聲聊天&quot; &quot;TempleTry&quot;&gt;&gt;
-    你答錯了！
+    &lt;&lt;set $score = Math.max($score - 5, 0)&gt;&gt;
+    &lt;&lt;run showWrong()&gt;&gt;
 &lt;&lt;/link&gt;&gt;
 
 &lt;&lt;link &quot;C. 快速跑動&quot; &quot;TempleTry&quot;&gt;&gt;
-    你答錯了！
-&lt;&lt;/link&gt;&gt;</tw-passagedata><tw-passagedata pid="16" name="TempleAsk" tags="" position="650,150" size="100,100">朋友說：
+    &lt;&lt;set $score = Math.max($score - 5, 0)&gt;&gt;
+    &lt;&lt;run showWrong()&gt;&gt;
+&lt;&lt;/link&gt;&gt;</tw-passagedata><tw-passagedata pid="19" name="TempleAsk" tags="" position="1025,150" size="100,100">朋友說：
 
 「進廟宇要保持安靜，看到香爐不要亂碰。」
 
 你點點頭，跟著大家慢慢走。
 
-[[前往下一站-&gt;TempleNext]]</tw-passagedata><tw-passagedata pid="17" name="TempleNext" tags="" position="775,150" size="100,100">離開廟宇後，你們來到傳統茶館。
+[[前往下一站-&gt;TempleNext]]</tw-passagedata><tw-passagedata pid="20" name="TempleNext" tags="" position="1150,150" size="100,100">離開廟宇後，你們來到傳統茶館。
 
 老闆端上茶具，水聲很清脆。
 
@@ -576,17 +781,17 @@ body {
 你要：
 
 &lt;&lt;link &quot;A. 慢慢品茶，感受香氣&quot; &quot;Tea1&quot;&gt;&gt;
-    &lt;&lt;set $score += 10&gt;&gt;
+    &lt;&lt;set $score = Math.min($score + 10, 100)&gt;&gt;
 &lt;&lt;/link&gt;&gt;
 
 &lt;&lt;link &quot;B. 一口喝完，怕燙&quot; &quot;Tea1&quot;&gt;&gt;
-    &lt;&lt;set $score += 4&gt;&gt;
+    &lt;&lt;set $score = Math.min($score + 4, 100)&gt;&gt;
 &lt;&lt;/link&gt;&gt;
 
 &lt;&lt;link &quot;C. 問老闆泡茶步驟&quot; &quot;Tea1&quot;&gt;&gt;
-    &lt;&lt;set $score += 8&gt;&gt;
+    &lt;&lt;set $score = Math.min($score + 8, 100)&gt;&gt;
     &lt;&lt;set $courage += 1&gt;&gt;
-&lt;&lt;/link&gt;&gt;</tw-passagedata><tw-passagedata pid="18" name="Tea1" tags="" position="900,150" size="100,100">茶香慢慢散開，你感覺很放鬆。
+&lt;&lt;/link&gt;&gt;</tw-passagedata><tw-passagedata pid="21" name="Tea1" tags="" position="25,275" size="100,100">茶香慢慢散開，你感覺很放鬆。
 
 ────────────────
 
@@ -595,17 +800,19 @@ body {
 「品茶」比較像哪一種感覺？
 
 &lt;&lt;link &quot;A. 慢慢感受&quot; &quot;CultureCraft&quot;&gt;&gt;
-    &lt;&lt;set $score += 10&gt;&gt;
+    &lt;&lt;set $score = Math.min($score + 10, 100)&gt;&gt;
     答對了！
 &lt;&lt;/link&gt;&gt;
 
 &lt;&lt;link &quot;B. 趕快喝完&quot; &quot;Tea1&quot;&gt;&gt;
-    你答錯了！
+    &lt;&lt;set $score = Math.max($score - 5, 0)&gt;&gt;
+    &lt;&lt;run showWrong()&gt;&gt;
 &lt;&lt;/link&gt;&gt;
 
 &lt;&lt;link &quot;C. 吃飽就好&quot; &quot;Tea1&quot;&gt;&gt;
-    你答錯了！
-&lt;&lt;/link&gt;&gt;</tw-passagedata><tw-passagedata pid="19" name="CultureCraft" tags="" position="1025,150" size="100,100">下午你們去體驗手作。
+    &lt;&lt;set $score = Math.max($score - 5, 0)&gt;&gt;
+    &lt;&lt;run showWrong()&gt;&gt;
+&lt;&lt;/link&gt;&gt;</tw-passagedata><tw-passagedata pid="22" name="CultureCraft" tags="" position="150,275" size="100,100">下午你們去體驗手作。
 
 老師說今天要做「藍染」。
 
@@ -616,17 +823,17 @@ body {
 你要：
 
 &lt;&lt;link &quot;A. 把布折出花紋再染&quot; &quot;Dye1&quot;&gt;&gt;
-    &lt;&lt;set $score += 10&gt;&gt;
+    &lt;&lt;set $score = Math.min($score + 10, 100)&gt;&gt;
     &lt;&lt;set $courage += 1&gt;&gt;
 &lt;&lt;/link&gt;&gt;
 
 &lt;&lt;link &quot;B. 直接丟進去試試&quot; &quot;Dye1&quot;&gt;&gt;
-    &lt;&lt;set $score += 6&gt;&gt;
+    &lt;&lt;set $score = Math.min($score + 6, 100)&gt;&gt;
 &lt;&lt;/link&gt;&gt;
 
 &lt;&lt;link &quot;C. 先看別人怎麼做&quot; &quot;Dye1&quot;&gt;&gt;
-    &lt;&lt;set $score += 8&gt;&gt;
-&lt;&lt;/link&gt;&gt;</tw-passagedata><tw-passagedata pid="20" name="Dye1" tags="" position="1150,150" size="100,100">布慢慢變成漂亮的藍色，你覺得很有成就感。
+    &lt;&lt;set $score = Math.min($score + 8, 100)&gt;&gt;
+&lt;&lt;/link&gt;&gt;</tw-passagedata><tw-passagedata pid="23" name="Dye1" tags="" position="275,275" size="100,100">布慢慢變成漂亮的藍色，你覺得很有成就感。
 
 ────────────────
 
@@ -635,17 +842,19 @@ body {
 「藍染」是什麼？
 
 &lt;&lt;link &quot;A. 用天然染料染布&quot; &quot;CultureEnding&quot;&gt;&gt;
-    &lt;&lt;set $score += 10&gt;&gt;
+    &lt;&lt;set $score = Math.min($score + 10, 100)&gt;&gt;
     答對了！
 &lt;&lt;/link&gt;&gt;
 
 &lt;&lt;link &quot;B. 把布漂白&quot; &quot;Dye1&quot;&gt;&gt;
-    你答錯了！
+    &lt;&lt;set $score = Math.max($score - 5, 0)&gt;&gt;
+    &lt;&lt;run showWrong()&gt;&gt;
 &lt;&lt;/link&gt;&gt;
 
 &lt;&lt;link &quot;C. 把布剪成碎片&quot; &quot;Dye1&quot;&gt;&gt;
-    你答錯了！
-&lt;&lt;/link&gt;&gt;</tw-passagedata><tw-passagedata pid="21" name="CultureEnding" tags="" position="25,275" size="100,100">夕陽西下，你看著自己完成的作品。
+    &lt;&lt;set $score = Math.max($score - 5, 0)&gt;&gt;
+    &lt;&lt;run showWrong()&gt;&gt;
+&lt;&lt;/link&gt;&gt;</tw-passagedata><tw-passagedata pid="24" name="CultureEnding" tags="" position="400,275" size="100,100">夕陽西下，你看著自己完成的作品。
 
 朋友笑著說：
 
